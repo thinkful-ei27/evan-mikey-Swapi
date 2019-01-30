@@ -3,6 +3,8 @@
 // inserted so you can check your loading state
 import {search} from './star-wars';
 
+
+
 export const SEARCH_CHARACTERS_REQUEST = 'SEARCH_CHARACTERS_REQUEST';
 export const searchCharactersRequest = () => ({
     type: SEARCH_CHARACTERS_REQUEST
@@ -23,5 +25,15 @@ export const searchCharactersError = error => ({
 export const searchCharacters = name => dispatch => {
     // Make this async action using the search function
     // It should dispatch the three sync actions above
+dispatch(searchCharactersRequest());
+    fetch(search).then(res => {
+        if(!res.ok){
+            return Promise.reject( console.log('fail!'))
+        }
+        console.log(res)
+        return res.json();
+    })
+    .then(character =>searchCharactersSuccess(character))
+    .catch(err => dispatch(searchCharactersError(err)))
 };
 

@@ -3,12 +3,13 @@ function _search(name) {
         return Promise.reject('Something went wrong');
     }
 
-    return fetch(`https://swapi.co/api/people/?search=${name}`).then(res => {
+    return Promise.resolve(['Luke Skywalker', 'Han Solo']);
+    /*return fetch(`https://swapi.co/api/people/?search=${name}`).then(res => {
         if (!res.ok) {
             return Promise.reject(res.statusText);
         }
         return res.json();
-    }).then(data => data.results.map(character => character.name));
+    }).then(data => data.results.map(character => character.name));*/
 }
 
 export function search(name) {
