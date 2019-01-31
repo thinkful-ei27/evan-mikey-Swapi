@@ -1,7 +1,7 @@
 // This function will make an AJAX request to the Star Wars API
 // It will randomly fail for 25% of requests, and has a 0.5s delay artifically
 // inserted so you can check your loading state
-import { search } from './star-wars';
+// import { search } from './star-wars';
 
 export const SEARCH_CHARACTERS_REQUEST = 'SEARCH_CHARACTERS_REQUEST';
 export const searchCharactersRequest = () => ({
@@ -24,7 +24,17 @@ export const searchCharacters = name => dispatch => {
   // Make this async action using the search function
   // It should dispatch the three sync actions above
   dispatch(searchCharactersRequest());
-  search(name)
-    .then(character => dispatch(searchCharactersSuccess(character)))
+  fetch(`https://swapi.co/api/people/?search=${name}`)
+    .then(res => {
+      if (!res.ok) {
+        return Promise.reject(res.statusText);
+      }
+      return res.json();
+    })
+    .then(data =>
+      data.results.map(character =>
+        dispatch(searchCharactersSuccess(character.name))
+      )
+    )
     .catch(err => dispatch(searchCharactersError(err)));
 };
